@@ -277,6 +277,10 @@ def call_main(args, main, **kwargs):
     if args.distributed_init_method is not None:
         # distributed training
         if not args.distributed_no_spawn:
+            args.distributed_num_procs = min(
+                torch.cuda.device_count(),
+                args.distributed_world_size,
+            )
             start_rank = args.distributed_rank
             args.distributed_rank = None  # assign automatically
             kwargs["start_rank"] = start_rank
